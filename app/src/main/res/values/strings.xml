@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">STUAPP Conductor</string>
+    <array name="rutas">
+        <item>Amalucan</item>
+        <item>Capu</item>
+        <item>Cuatutlancingo</item>
+        <item>Los Heroes</item>
+        <item>Maravillas</item>
+        <item>San Ramón</item>
+    </array>
+    <string name="btnIniciar">Iniciar Recorrido</string>
+    <string name="btnFinalizar">Finalizar Recorrido</string>
+
+    <string name="URLRegister">http://stuapp.esy.es/insert.php</string>
+    <string name="URLDelete">http://stuapp.esy.es/delete.php</string>
+
+    <string name="idConductor">idConductor</string>
+    <string name="idRuta">idRuta</string>
+    <string name="latitud">latitud</string>
+    <string name="longitud">longitud</string>
+</resources>
