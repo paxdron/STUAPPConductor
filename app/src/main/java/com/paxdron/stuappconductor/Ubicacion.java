@@ -15,4 +15,8 @@ public class Ubicacion {
         this.idRuta = idRuta;
         this.latitud = latitud;
     }
+
+    public Ubicacion(int idCond) {
+        idConductor=idCond;
+    }
 }

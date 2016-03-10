@@ -1,18 +1,25 @@
 <resources>
     <string name="app_name">STUAPP Conductor</string>
     <array name="rutas">
-        <item>Amalucan</item>
-        <item>Capu</item>
-        <item>Cuatutlancingo</item>
-        <item>Los Heroes</item>
-        <item>Maravillas</item>
-        <item>San Ramón</item>
+        <item>Amalucan - CU</item>
+        <item>CU - Amalucan</item>
+        <item>Capu - CU</item>
+        <item>CU - Capu</item>
+        <item>Cuatutlancingo - CU</item>
+        <item>CU - Cuatutlancingo</item>
+        <item>Los Heroes - CU</item>
+        <item>CU - Los Heroes</item>
+        <item>Maravillas - CU</item>
+        <item>CU - Maravillas</item>
+        <item>San Ramón - CU</item>
+        <item>CU - San Ramón</item>
     </array>
     <string name="btnIniciar">Iniciar Recorrido</string>
     <string name="btnFinalizar">Finalizar Recorrido</string>
 
     <string name="URLRegister">http://stuapp.esy.es/insert.php</string>
     <string name="URLDelete">http://stuapp.esy.es/delete.php</string>
+    <string name="URLUpdate">http://stuapp.esy.es/update.php</string>
 
     <string name="idConductor">idConductor</string>
     <string name="idRuta">idRuta</string>
