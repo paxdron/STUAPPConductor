@@ -17,12 +17,72 @@
     <string name="btnIniciar">Iniciar Recorrido</string>
     <string name="btnFinalizar">Finalizar Recorrido</string>
 
-    <string name="URLRegister">http://stuapp.esy.es/insert.php</string>
-    <string name="URLDelete">http://stuapp.esy.es/delete.php</string>
-    <string name="URLUpdate">http://stuapp.esy.es/update.php</string>
+    <string name="URLRegister">http://stuapp.hol.es/db/insert.php</string>
+    <string name="URLDelete">http://stuapp.hol.es/db/delete.php</string>
+    <string name="URLUpdate">http://stuapp.hol.es/db/update.php</string>
 
     <string name="idConductor">idConductor</string>
     <string name="idRuta">idRuta</string>
     <string name="latitud">latitud</string>
     <string name="longitud">longitud</string>
+    <string name="idBus">idBus</string>
+
+    <string name="login">Iniciar Sesión</string>
+    <string name="register">Registrar</string>
+    <string name="user">Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="go">Acceder</string>
+    <string name="name">Usuario</string>
+    <string name="repeatPassw">Confirmar Contraseña</string>
+    <string name="next">Siguiente</string>
+
+    <array name="buses">
+        <item>U-01</item>
+        <item>U-02</item>
+        <item>U-03</item>
+    </array>
+    <array name="usersMail">
+        <item>alex@gmail.com</item>
+        <item>Warszawa@gmail.com</item>
+        <item>Frankfurt@gmail.com</item>
+        <item>Madrid@gmail.com</item>
+        <item>Kobenhavn@gmail.com</item>
+        <item>Singapore@gmail.com</item>
+        <item>Bergen@gmail.com</item>
+        <item>sdw@gmail.com</item>
+        <item>Marko@gmail.com</item>
+    </array>
+    <array name="pass">
+        <item>"54321"</item>
+        <item>asd</item>
+        <item>asdfasf</item>
+        <item>"12134"</item>
+        <item>"1234"</item>
+        <item>"123"</item>
+        <item>"123"</item>
+        <item>"1234"</item>
+        <item>"1234"</item>
+    </array>
+    <array name="idCon">
+        <item>"171"</item>
+        <item>"125"</item>
+        <item>"128"</item>
+        <item>"141"</item>
+        <item>"145"</item>
+        <item>"148"</item>
+        <item>"167"</item>
+        <item>"169"</item>
+        <item>"160"</item>
+    </array>
+    <array name="userName">
+        <item>Alejandro</item>
+        <item>Havel</item>
+        <item>Blauer</item>
+        <item>Euro</item>
+        <item>Danish</item>
+        <item>Dragon</item>
+        <item>Herku</item>
+        <item>qwewqe</item>
+        <item>Marko</item>
+    </array>
 </resources>

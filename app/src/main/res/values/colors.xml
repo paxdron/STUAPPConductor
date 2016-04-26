@@ -3,4 +3,9 @@
     <color name="colorPrimary">#0288D1</color>
     <color name="colorPrimaryDark">#003b5c</color>
     <color name="colorAccent">#607D8B</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="material_login_login_color">#003b5c</color>
+    <color name="material_login_register_color">#0288D1</color>
+    <color name="material_login_login_error_color">#ffbebe</color>
+    <color name="material_login_register_error_color">#600002</color>
 </resources>

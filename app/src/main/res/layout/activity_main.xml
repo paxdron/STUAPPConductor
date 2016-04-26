@@ -16,12 +16,41 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
+        android:background="@color/colorWhite"
         >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bienvenido: "
+            android:layout_gravity="center"
+            android:textSize="25sp"
+            android:id="@+id/tvWelcome"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar Ruta"
+            android:layout_gravity="center"
+            android:textSize="25sp"
+
+            />
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spSelectRuta"
         />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar Unidad"
+            android:layout_gravity="center"
+            android:textSize="25sp"
+            />
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spSelectUnidad"
+            />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,6 +60,13 @@
         android:onClick="iniciarRecorrido"
         />
     </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/locationText"
+        android:layout_gravity="center"
+        android:textSize="25sp"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -38,4 +74,5 @@
         android:layout_gravity="bottom|end"
         >
     </LinearLayout>
+
 </LinearLayout>

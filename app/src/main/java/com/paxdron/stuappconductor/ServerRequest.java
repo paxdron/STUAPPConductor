@@ -69,6 +69,7 @@ public class ServerRequest {
             int idRuta = location.idRuta;
             double latitud = location.latitud;
             double longitud = location.longitud;
+            int idBus = location.idBus;
 
             try {
                 URL url = new URL(context.getString(R.string.URLRegister));
@@ -81,7 +82,8 @@ public class ServerRequest {
                 String data = URLEncoder.encode(context.getString(R.string.idRuta), "UTF-8") + "=" + URLEncoder.encode(Integer.toString(idRuta), "UTF-8") + "&" +
                         URLEncoder.encode(context.getString(R.string.idConductor), "UTF-8") + "=" + URLEncoder.encode(Integer.toString(idConductor), "UTF-8") + "&" +
                         URLEncoder.encode(context.getString(R.string.latitud), "UTF-8") + "=" + URLEncoder.encode(Double.toString(latitud), "UTF-8") + "&" +
-                        URLEncoder.encode(context.getString(R.string.longitud), "UTF-8") + "=" + URLEncoder.encode(Double.toString(longitud), "UTF-8");
+                        URLEncoder.encode(context.getString(R.string.longitud), "UTF-8") + "=" + URLEncoder.encode(Double.toString(longitud), "UTF-8") + "&" +
+                        URLEncoder.encode(context.getString(R.string.idBus), "UTF-8") + "=" + URLEncoder.encode(Double.toString(idBus), "UTF-8");
                 System.out.println("info enviada "+data);
                 bufferedWriter.write(data);
                 bufferedWriter.flush();

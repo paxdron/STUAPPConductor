@@ -1,98 +1,88 @@
 package com.paxdron.stuappconductor;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
-    private static final int ID_CONDUCTOR=0;
-    public Spinner spinner;
+import com.yayandroid.locationmanager.LocationBaseActivity;
+import com.yayandroid.locationmanager.LocationConfiguration;
+import com.yayandroid.locationmanager.LocationManager;
+import com.yayandroid.locationmanager.constants.FailType;
+import com.yayandroid.locationmanager.constants.LogType;
+import com.yayandroid.locationmanager.constants.ProviderType;
+
+public class MainActivity extends LocationBaseActivity {
+    public Spinner spinnerRuta,spinnerBus;
     private Button btnIniFinRec;
     Handler handler = new Handler();
     private boolean active;
-    LocationManager locationManager;
-    Location location_;
     AlertDialog alert = null;
-    LocationListener locationListener;
     Ubicacion current;
     ServerRequest serverRequest;
-
+    String nombreUser;
+    int idConductor;
+    private ProgressDialog progressDialog;
 
     // Define the code block to be executed
     private Runnable runnableCode = new Runnable() {
         @Override
         public void run() {
             // Do something here on the main thread
-            getCurrentLocation();
-
+            current.latitud=location_.getLatitude();
+            current.longitud=location_.getLongitude();
             ActualizarRecorrido(current);
             System.out.println(current.latitud + " " + current.longitud);
             // Repeat this the same runnable code block again another 2 seconds
-            handler.postDelayed(runnableCode, 2000);
+            handler.postDelayed(runnableCode, 5000);
+            getLocation();
         }
     };
+    private TextView locationText;
+    private Location location_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        spinner = (Spinner) findViewById(R.id.spSelectRuta);
+        nombreUser=getIntent().getExtras().getString(Login.USER);
+        idConductor=Integer.parseInt(getIntent().getExtras().getString(Login.ID_USER));
+        ((TextView)findViewById(R.id.tvWelcome)).setText("Bienvenido "+nombreUser);
+        spinnerRuta = (Spinner) findViewById(R.id.spSelectRuta);
+        spinnerBus = (Spinner) findViewById(R.id.spSelectUnidad);
         btnIniFinRec=(Button)findViewById(R.id.btnIniciar);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.rutas, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
+                R.array.buses, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerRuta.setAdapter(adapter);
+        spinnerBus.setAdapter(adapter2);
         active=false;
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        current= new Ubicacion(ID_CONDUCTOR);
+        current= new Ubicacion(idConductor);
+        locationText = (TextView) findViewById(R.id.locationText);
 
-        getCurrentLocation();
-
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                current.latitud=location.getLatitude();
-                current.longitud=location.getLatitude();
-                System.out.println("Cambio");
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        };
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            }
-        }
+        LocationManager.setLogType(LogType.GENERAL);
+        getLocation();
         serverRequest = new ServerRequest(this);
         /*
         LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -103,21 +93,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void iniciarRecorrido(View v){
-        int idRuta=spinner.getSelectedItemPosition();
-        getCurrentLocation();
+        int idRuta=spinnerRuta.getSelectedItemPosition();
         double lat=location_.getLatitude();
         double lon=location_.getLongitude();
+        int idBus =spinnerBus.getSelectedItemPosition()+1;
         String locStr=Double.toString(lat)+" "+Double.toString(lon);
         showToast(locStr, this);
 
         if(active) {
             handler.removeCallbacks(runnableCode);
-            finalizarRecorrido(ID_CONDUCTOR);
+            finalizarRecorrido(idConductor);
             btnIniFinRec.setText(getString(R.string.btnIniciar));
         }
         else {
             handler.post(runnableCode);
-            current=new Ubicacion(ID_CONDUCTOR,idRuta,lat,lon);
+            current=new Ubicacion(idConductor,idRuta,lat,lon,idBus);
             iniciarRecorrido(current);
             btnIniFinRec.setText(getString(R.string.btnFinalizar));
         }
@@ -129,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         serverRequest.registerDoInBackground(location, new GetUbicacionCallback() {
             @Override
             public void done(Ubicacion returnedUbicacion) {
-                showToast("Iniciado",getApplicationContext());
+                showToast("Iniciado", getApplicationContext());
             }
         });
     }
@@ -174,31 +164,61 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
-    public void getCurrentLocation(){
-        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-            AlertNoGps();
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                return;
-            } else {
-                location_ = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            }
-        } else {
-            location_ = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        }
-    }
-
-
     @Override
     protected void onDestroy() {
         if(active) {
             handler.removeCallbacks(runnableCode);
-            finalizarRecorrido(ID_CONDUCTOR);
+            finalizarRecorrido(idConductor);
         }
         super.onDestroy();
     }
+
+    @Override
+    public LocationConfiguration getLocationConfiguration() {
+        return new LocationConfiguration()
+                .keepTracking(true)
+                .askForGooglePlayServices(true)
+                .setWaitPeriod(ProviderType.GOOGLE_PLAY_SERVICES, 5 * 100)
+                .setWaitPeriod(ProviderType.GPS, 5 * 100)
+                .setWaitPeriod(ProviderType.NETWORK, 5 * 100)
+                .setTimeInterval(5 * 1000);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        setText(location);
+    }
+
+    @Override
+    public void onLocationFailed(int failType) {
+        switch (failType) {
+            case FailType.PERMISSION_DENIED: {
+                locationText.setText("Couldn't get location, because user didn't give permission!");
+                break;
+            }
+            case FailType.GP_SERVICES_NOT_AVAILABLE:
+            case FailType.GP_SERVICES_CONNECTION_FAIL: {
+                locationText.setText("Couldn't get location, because Google Play Services not available!");
+                break;
+            }
+            case FailType.NETWORK_NOT_AVAILABLE: {
+                locationText.setText("Couldn't get location, because network is not accessible!");
+                break;
+            }
+            case FailType.TIMEOUT: {
+                locationText.setText("Couldn't get location, and timeout!");
+                break;
+            }
+        }
+    }
+
+
+    private void setText(Location location) {
+        location_=location;
+        String appendValue = location.getLatitude() + ", " + location.getLongitude() + "\n";
+
+        locationText.setText(appendValue);
+    }
+
+
 }

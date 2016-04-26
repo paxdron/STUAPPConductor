@@ -8,12 +8,13 @@ public class Ubicacion {
     public int idRuta;
     public double latitud;
     public double longitud;
-
-    public Ubicacion(int idConductor, int idRuta, double latitud,double longitud) {
+    public int idBus;
+    public Ubicacion(int idConductor, int idRuta, double latitud,double longitud, int idBus) {
         this.idConductor=idConductor;
         this.longitud = longitud;
         this.idRuta = idRuta;
         this.latitud = latitud;
+        this.idBus = idBus;
     }
 
     public Ubicacion(int idCond) {
